@@ -131,7 +131,7 @@ export function HeroSection({ onExplore }: Props) {
             </span>
           </motion.div>
 
-          <h1 className="flex flex-col font-sans text-[18vw] font-black uppercase leading-[0.9] tracking-tighter text-zinc-100 sm:text-[13vw] md:text-[clamp(60px,8vw,96px)] md:leading-none">
+          <h1 className="flex flex-col font-sans text-[11vw] font-black uppercase leading-[0.9] tracking-tighter text-zinc-100 sm:text-[13vw] md:text-[clamp(60px,8vw,96px)] md:leading-none">
             <span className="flex justify-center overflow-hidden py-0 md:justify-start md:py-1">
               {Array.from(siteConfig.firstName).map((char, index) => (
                 <motion.span

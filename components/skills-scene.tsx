@@ -6,6 +6,8 @@ import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { skills } from "@/constants/site";
 
+// ─── Types ────────────────────────────────────────────────────────────────────
+
 type Skill = (typeof skills)[number];
 
 type Ball = {
@@ -21,6 +23,8 @@ type Ball = {
   interacted: boolean;
 };
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+
 const HEMISPHERE_SEGMENTS: [number, number, number, number, number, number][] = [
   [32, 32, Math.PI / 2 - 0.5, 1, Math.PI / 2 - 0.5, 1],
   [32, 32, Math.PI * 1.5 - 0.5, 1, Math.PI / 2 - 0.5, 1],
@@ -28,13 +32,46 @@ const HEMISPHERE_SEGMENTS: [number, number, number, number, number, number][] = 
   [32, 32, Math.PI - 0.5, 1, Math.PI / 2 - 0.5, 1],
 ];
 
-function useSkillTexture(icon: string) {
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/** Build an initial ball-grid layout. Called synchronously so balls exist on the first render frame. */
+function buildGrid(allSkills: Skill[], mobile: boolean): Ball[] {
+  const radius = mobile ? 0.52 : 1.1;
+  const cols = mobile ? 4 : 7;
+  const spacingX = radius * 2.2;
+  const spacingY = radius * 2.6; // extra vertical gap for Html labels
+
+  return allSkills.map((_, index) => {
+    const col = index % cols;
+    const row = Math.floor(index / cols);
+    const totalRows = Math.ceil(allSkills.length / cols);
+    return {
+      id: index,
+      x: -((cols - 1) * spacingX) / 2 + col * spacingX,
+      y: ((totalRows - 1) * spacingY) / 2 - row * spacingY,
+      z: 0,
+      vx: (Math.random() - 0.5) * 0.22,
+      vy: (Math.random() - 0.5) * 0.22,
+      vz: (Math.random() - 0.5) * 0.08,
+      r: radius,
+      spinSpeed: Math.random() * 0.05,
+      interacted: true, // start animated immediately
+    };
+  });
+}
+
+// ─── Hooks ────────────────────────────────────────────────────────────────────
+
+/** Load an SVG icon as a THREE texture. Skips fetch when icon path is empty. */
+function useSkillTexture(icon: string): THREE.Texture | null {
   const [texture, setTexture] = useState<THREE.Texture | null>(null);
 
   useEffect(() => {
+    if (!icon) return; // no icon path — keep texture null, skip fetch
+
     let active = true;
 
-    const loadTexture = (url: string) => {
+    const loadDirect = (url: string) => {
       new THREE.TextureLoader().load(
         url,
         (loaded) => {
@@ -44,32 +81,29 @@ function useSkillTexture(icon: string) {
           setTexture(loaded);
         },
         undefined,
-        () => {
-          if (!active) return;
-          setTexture(null);
-        }
+        () => { if (active) setTexture(null); }
       );
     };
 
     fetch(icon)
-      .then((response) => response.text())
+      .then((res) => res.text())
       .then((svg) => {
         const patched = svg
           .replace(/width="[^"]*"/g, "")
           .replace(/height="[^"]*"/g, "")
           .replace("<svg ", '<svg width="512" height="512" ');
         const dataUrl = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(patched)))}`;
-        loadTexture(dataUrl);
+        loadDirect(dataUrl);
       })
-      .catch(() => loadTexture(icon));
+      .catch(() => loadDirect(icon));
 
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, [icon]);
 
   return texture;
 }
+
+// ─── SkillBall ─────────────────────────────────────────────────────────────────
 
 function SkillBall({
   skill,
@@ -84,6 +118,7 @@ function SkillBall({
   const texture = useSkillTexture(skill.icon);
   const ball = ballsRef.current[index];
   const radius = ball?.r ?? 1.1;
+  const hasIcon = Boolean(skill.icon);
 
   useFrame(() => {
     if (!groupRef.current || !ball) return;
@@ -110,8 +145,8 @@ function SkillBall({
   return (
     <group
       ref={groupRef}
-      onClick={(event) => {
-        event.stopPropagation();
+      onClick={(e) => {
+        e.stopPropagation();
         if (!ball) return;
         ball.interacted = true;
         ball.spinSpeed = 0.4;
@@ -120,31 +155,21 @@ function SkillBall({
         ball.vy += (Math.random() - 0.5) * 0.5;
       }}
     >
-      {/* Base sphere */}
+      {/* Base sphere — white for icon balls, dark-blue for text-only balls */}
       <mesh>
         <sphereGeometry args={[radius, 64, 64]} />
         <meshStandardMaterial
-          color={skill.icon ? "#e5e7eb" : "#1e3a5f"}
-          metalness={skill.icon ? 0.05 : 0.3}
-          roughness={skill.icon ? 0.3 : 0.4}
+          color={hasIcon ? "#e5e7eb" : "#1e3a5f"}
+          metalness={hasIcon ? 0.05 : 0.3}
+          roughness={hasIcon ? 0.3 : 0.4}
         />
       </mesh>
 
-      {/* SVG icon overlaid on the ball (only when icon exists) */}
+      {/* SVG icon projected onto the sphere surface */}
       {texture &&
-        HEMISPHERE_SEGMENTS.map((segment, segmentIndex) => (
-          <mesh key={`${skill.name}-${segmentIndex}`}>
-            <sphereGeometry
-              args={[
-                radius * 1.01,
-                segment[0],
-                segment[1],
-                segment[2],
-                segment[3],
-                segment[4],
-                segment[5],
-              ]}
-            />
+        HEMISPHERE_SEGMENTS.map((seg, i) => (
+          <mesh key={`${skill.name}-seg-${i}`}>
+            <sphereGeometry args={[radius * 1.01, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5]]} />
             <meshStandardMaterial
               map={texture}
               transparent
@@ -156,7 +181,7 @@ function SkillBall({
           </mesh>
         ))}
 
-      {/* Text label always visible below the ball */}
+      {/* Skill name label — always visible below the ball */}
       <Html
         position={[0, -(radius + 0.35), 0]}
         center
@@ -187,61 +212,52 @@ function SkillBall({
   );
 }
 
-function SkillsPhysics({ allSkills }: { allSkills: Skill[] }) {
-  const ballsRef = useRef<Ball[]>([]);
-  const mouse = useRef({ x: 0, y: 0, active: false });
-  const isMobile = useRef(false);
+// ─── SkillsPhysics ─────────────────────────────────────────────────────────────
 
+function SkillsPhysics({ allSkills }: { allSkills: Skill[] }) {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
+  // Build grid synchronously so balls exist on the very first render frame
+  const ballsRef = useRef<Ball[]>(buildGrid(allSkills, isMobile));
+  const mouseRef = useRef({ x: 0, y: 0, active: false });
+  const isMobileRef = useRef(isMobile);
+
+  // Rebuild grid when viewport crosses the mobile breakpoint
   useEffect(() => {
     const onResize = () => {
-      isMobile.current = window.innerWidth < 768;
+      const mobile = window.innerWidth < 768;
+      if (mobile !== isMobileRef.current) {
+        isMobileRef.current = mobile;
+        ballsRef.current = buildGrid(allSkills, mobile);
+      }
     };
-    onResize();
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, []);
-
-  if (ballsRef.current.length !== allSkills.length) {
-    const radius = isMobile.current ? 0.58 : 1.1;
-    const cols = isMobile.current ? 3 : 7;
-    const spacing = radius * 2;
-    ballsRef.current = allSkills.map((_, index) => {
-      const col = index % cols;
-      const row = Math.floor(index / cols);
-      const totalRows = Math.ceil(allSkills.length / cols);
-      return {
-        id: index,
-        x: -((cols - 1) * spacing) / 2 + col * spacing,
-        y: ((totalRows - 1) * spacing) / 2 - row * spacing,
-        z: 0,
-        // Give each ball an initial random velocity so they scatter immediately on mount
-        vx: (Math.random() - 0.5) * 0.22,
-        vy: (Math.random() - 0.5) * 0.22,
-        vz: (Math.random() - 0.5) * 0.08,
-        r: radius,
-        spinSpeed: Math.random() * 0.05,
-        interacted: true, // pre-mark interacted so rotations are alive from the start
-      };
-    });
-  }
+  }, [allSkills]);
 
   useFrame(({ viewport, pointer }) => {
     const balls = ballsRef.current;
     const mx = pointer.x * (viewport.width / 2);
     const my = pointer.y * (viewport.height / 2);
-    mouse.current = { x: mx, y: my, active: Math.abs(pointer.x) > 0.01 || Math.abs(pointer.y) > 0.01 };
+    const isActive = Math.abs(pointer.x) > 0.01 || Math.abs(pointer.y) > 0.01;
+    mouseRef.current = { x: mx, y: my, active: isActive };
 
-    const attractRadius = isMobile.current ? 2.4 : 5.5;
-    const damping = mouse.current.active ? 0.98 : 0.995;
-    const boundsX = viewport.width / 2 - (isMobile.current ? 0.8 : 1.2);
-    const boundsY = viewport.height / 2 - (isMobile.current ? 0.8 : 1.2);
+    const mobile = isMobileRef.current;
+    const attractRadius = mobile ? 2.4 : 5.5;
+    const damping = isActive ? 0.98 : 0.995;
+    // Extra margin on mobile so Html labels don't clip at the canvas edge
+    const boundsX = viewport.width / 2 - (mobile ? 0.7 : 1.2);
+    const boundsY = viewport.height / 2 - (mobile ? 1.1 : 1.2);
 
+    // ── Apply forces ──────────────────────────────────────────────────────────
     for (const ball of balls) {
+      // Gravity towards centre
       ball.vx += -ball.x * 0.0003;
       ball.vy += -ball.y * 0.0003;
       ball.vz += -ball.z * 0.01;
 
-      if (mouse.current.active) {
+      // Mouse repulsion
+      if (isActive) {
         const dx = ball.x - mx;
         const dy = ball.y - my;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -253,6 +269,7 @@ function SkillsPhysics({ allSkills }: { allSkills: Skill[] }) {
         }
       }
 
+      // Integrate
       ball.x += ball.vx;
       ball.y += ball.vy;
       ball.z += ball.vz;
@@ -260,32 +277,16 @@ function SkillsPhysics({ allSkills }: { allSkills: Skill[] }) {
       ball.vy *= damping;
       ball.vz *= damping;
 
-      if (ball.x > boundsX) {
-        ball.x = boundsX;
-        ball.vx *= -0.9;
-      }
-      if (ball.x < -boundsX) {
-        ball.x = -boundsX;
-        ball.vx *= -0.9;
-      }
-      if (ball.y > boundsY) {
-        ball.y = boundsY;
-        ball.vy *= -0.9;
-      }
-      if (ball.y < -boundsY) {
-        ball.y = -boundsY;
-        ball.vy *= -0.9;
-      }
-      if (ball.z > 2) {
-        ball.z = 2;
-        ball.vz *= -0.8;
-      }
-      if (ball.z < -2) {
-        ball.z = -2;
-        ball.vz *= -0.8;
-      }
+      // Boundary collisions
+      if (ball.x > boundsX)  { ball.x = boundsX;   ball.vx *= -0.9; }
+      if (ball.x < -boundsX) { ball.x = -boundsX;  ball.vx *= -0.9; }
+      if (ball.y > boundsY)  { ball.y = boundsY;   ball.vy *= -0.9; }
+      if (ball.y < -boundsY) { ball.y = -boundsY;  ball.vy *= -0.9; }
+      if (ball.z > 2)  { ball.z = 2;   ball.vz *= -0.8; }
+      if (ball.z < -2) { ball.z = -2;  ball.vz *= -0.8; }
     }
 
+    // ── Ball–ball collision ───────────────────────────────────────────────────
     for (let i = 0; i < balls.length; i++) {
       for (let j = i + 1; j < balls.length; j++) {
         const a = balls[i];
@@ -329,19 +330,26 @@ function SkillsPhysics({ allSkills }: { allSkills: Skill[] }) {
   );
 }
 
+// ─── SkillsScene (exported) ────────────────────────────────────────────────────
+
 export function SkillsScene() {
-  const [visible, setVisible] = useState(false);
+  // Mount the Canvas once when the section nears the viewport, then keep it alive permanently.
+  const [everVisible, setEverVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const allSkills = useMemo(() => skills, []);
 
   useEffect(() => {
     const node = containerRef.current;
     if (!node) return;
-    // Use a large rootMargin so the Canvas mounts before the section scrolls into full view
-    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), {
-      threshold: 0,
-      rootMargin: "400px 0px",
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setEverVisible(true);
+          observer.disconnect(); // never unmount again
+        }
+      },
+      { threshold: 0, rootMargin: "300px 0px" }
+    );
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
@@ -349,9 +357,10 @@ export function SkillsScene() {
   return (
     <div
       ref={containerRef}
-      className="relative flex h-[37.5rem] w-full cursor-crosshair items-center justify-center overflow-hidden bg-zinc-950 md:h-[50rem]"
+      // Taller on mobile to fit 4-column × 7-row grid with labels
+      className="relative flex h-[56rem] w-full cursor-crosshair items-center justify-center overflow-hidden bg-zinc-950 md:h-[50rem]"
     >
-      {visible ? (
+      {everVisible ? (
         <Canvas camera={{ position: [0, 0, 40], fov: 20 }} gl={{ antialias: true, alpha: true }}>
           <SkillsPhysics allSkills={allSkills} />
         </Canvas>

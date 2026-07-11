@@ -36,16 +36,13 @@ export const aboutTags = [
   "React",
   "Next.js",
   "TypeScript",
+  "JavaScript",
   "Node.js",
   "Express",
   "PostgreSQL",
   "MongoDB",
   "Prisma",
-  "Javascript",
-  "Docker",
-  "Git",
-  "AWS",
-  "python",
+  "Python",
   "C++",
   "MySQL",
   "CI/CD",
@@ -64,8 +61,9 @@ export const aboutTags = [
   "Tailwind CSS",
   "Redux",
   "Shadcn UI",
-  "Responsive Design"
+  "Responsive Design",
 ];
+
 
 export const skills = [
   { name: "React", icon: "/svgs/react.svg" },
@@ -189,7 +187,7 @@ export const projects = [
     tech: ["MongoDB", "Express.js", "React.js", "Node.js", "Tailwind CSS", "Component-based Architecture"],
     github: "https://github.com/sumitupadhyay84/food-delivery-application",
     live: "https://food-delivery-application-khyc.vercel.app/",
-    image: "/images/food.png",
+    image: "/images/Food.png",
     features: [
       "RESTful API with validation",
       "Admin management console",
