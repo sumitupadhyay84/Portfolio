@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/svgs/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Primary Meta Tags for SEO -->
+  <title>Govind Jangid | Full Stack MERN Developer Jaipur</title>
+  <meta name="title" content="Govind Jangid | Full Stack MERN Developer Jaipur" />
+  <meta name="description"
+    content="Looking to hire a MERN developer? Govind Jangid builds high-performance web applications, custom AI integrations, and scalable SaaS platforms globally." />
+  <meta name="keywords"
+    content="Govind Jangid, Full Stack MERN Developer Jaipur, React.js web application development, Custom Node.js API development, Full stack SaaS developer, MongoDB database design services, Real-time web application development, hire freelance MERN developer in Jaipur" />
+  <meta name="author" content="Govind Jangid" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="theme-color" content="#09090b" />
+  <link rel="canonical" href="https://portfolio-alpha-lime-53.vercel.app/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://portfolio-alpha-lime-53.vercel.app/" />
+  <meta property="og:title" content="Govind Jangid | Full Stack MERN Developer Jaipur" />
+  <meta property="og:description"
+    content="Looking to hire a MERN developer? Govind Jangid builds high-performance web applications, custom AI integrations, and scalable SaaS platforms globally." />
+  <meta property="og:image" content="https://portfolio-alpha-lime-53.vercel.app/images/profile-image.png" />
+  <meta property="og:site_name" content="Govind Jangid Portfolio" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://portfolio-alpha-lime-53.vercel.app/" />
+  <meta property="twitter:title" content="Govind Jangid | Full Stack MERN Developer Jaipur" />
+  <meta property="twitter:description"
+    content="Looking to hire a MERN developer? Govind Jangid builds high-performance web applications, custom AI integrations, and scalable SaaS platforms globally." />
+  <meta property="twitter:image" content="https://portfolio-alpha-lime-53.vercel.app/images/profile-image.png" />
+
+  <!-- JSON-LD Structured Data (Person Schema) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Govind Jangid",
+    "url": "https://portfolio-alpha-lime-53.vercel.app/",
+    "image": "https://portfolio-alpha-lime-53.vercel.app/images/profile-image.png",
+    "jobTitle": "Full Stack MERN Developer",
+    "description": "Results-driven Full Stack Developer specializing in the MERN stack. Building scalable, performant web applications with React.js, Node.js, MongoDB, and Express.js.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Jaipur",
+      "addressRegion": "Rajasthan",
+      "addressCountry": "IN"
+    },
+    "email": "govindkumarjangid17@gmail.com",
+    "sameAs": [
+      "https://github.com/govindkumarjangid",
+      "https://www.linkedin.com/in/govind-kumar-jangid-973820360/"
+    ],
+    "knowsAbout": ["React.js", "Node.js", "MongoDB", "Express.js", "JavaScript", "Tailwind CSS", "Full Stack Development", "Web Application Development"]
+  }
+  </script>
+  <script type="module" crossorigin src="/assets/index-B5_yks7z.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-CNC7AqOf.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-DCsKOOQF.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-framer-lqkxsNXe.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-react-B7aihFeO.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-icons-DYcsH5yA.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-Ce_b4S-T.css">
+</head>
+
+<body>
+  <main id="root"></main>
+</body>
+
+</html>
