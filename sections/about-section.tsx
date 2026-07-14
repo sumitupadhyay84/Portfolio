@@ -17,10 +17,10 @@ export function AboutSection() {
       className="flex flex-col justify-center"
     >
       {/* Two-column layout: sticky avatar LEFT, scrollable text RIGHT */}
-      <div className="mt-4 flex w-full flex-col items-start gap-10 md:mt-8 md:flex-row md:gap-16 lg:gap-20">
+      <div className="mt-4 flex w-full flex-col items-start gap-8 md:mt-8 md:flex-row md:gap-10 lg:gap-16 xl:gap-20">
 
         {/* LEFT: Sticky Avatar */}
-        <div className="flex w-full shrink-0 items-center justify-center md:sticky md:top-28 md:w-[38%] md:self-start lg:top-32 lg:w-[36%] xl:w-[34%]">
+        <div className="flex w-full shrink-0 items-center justify-center md:sticky md:top-28 md:w-[34%] md:self-start lg:top-32 lg:w-[36%] xl:w-[34%]">
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -68,7 +68,7 @@ export function AboutSection() {
           >
             {/* Headline */}
             <motion.h3
-              className="mb-5 flex flex-wrap gap-x-2 gap-y-1 text-2xl font-black uppercase leading-none tracking-tighter text-white sm:text-3xl md:mb-6 md:text-4xl lg:text-5xl xl:text-6xl"
+              className="mb-5 flex flex-wrap gap-x-2 gap-y-1 text-2xl font-black uppercase leading-none tracking-tighter text-white sm:text-3xl md:mb-6 md:text-3xl lg:text-4xl xl:text-6xl"
             >
               {headline.split(" ").map((word, index) => (
                 <span key={`${word}-${index}`} className="inline-flex overflow-hidden pb-1">

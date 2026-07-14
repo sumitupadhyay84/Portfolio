@@ -14,7 +14,7 @@ function EducationIcon({ type }: { type: string }) {
 export function EducationSection() {
   return (
     <Section id="education" title="Education" subtitle="My Academic Journey">
-      <div className="relative mx-auto mt-6 flex w-full flex-col gap-12 sm:mt-8 md:mt-12 md:gap-20 md:px-4 lg:gap-24 lg:px-8">
+      <div className="relative mx-auto mt-6 flex w-full flex-col gap-10 sm:mt-8 md:mt-10 md:gap-14 md:px-4 lg:gap-20 lg:px-8">
         {education.map((item, index) => (
           <motion.div
             key={item.id}
@@ -22,10 +22,10 @@ export function EducationSection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.8 }}
-            className="flex w-full flex-col items-start justify-between gap-6 border-b border-zinc-800/40 pb-12 last:border-0 last:pb-0 sm:gap-8 md:flex-row md:items-center md:gap-10 md:pb-20 lg:gap-14 lg:pb-24"
+            className="flex w-full flex-col items-start justify-between gap-6 border-b border-zinc-800/40 pb-10 last:border-0 last:pb-0 sm:gap-8 md:gap-10 md:pb-14 lg:flex-row lg:items-center lg:gap-14 lg:pb-20 xl:pb-24"
           >
             {/* Left: Info */}
-            <div className="relative flex w-full flex-row items-start gap-3 md:w-1/2 md:gap-5 lg:gap-6">
+            <div className="relative flex w-full flex-row items-start gap-3 lg:w-1/2 lg:gap-5 xl:gap-6">
               <div className="pointer-events-none absolute -left-3 -top-6 z-0 select-none opacity-20 sm:-left-4 sm:-top-8">
                 <EducationIcon type={item.type} />
               </div>
@@ -54,7 +54,7 @@ export function EducationSection() {
             </div>
 
             {/* Right: Card */}
-            <div className="flex w-full items-center justify-center md:w-1/2">
+            <div className="flex w-full items-center justify-center lg:w-1/2">
               <TiltCard className="w-full">
                 <div
                   className="group relative w-full overflow-hidden rounded-xl border border-white/10 bg-zinc-900/50 p-5 shadow-2xl sm:rounded-2xl sm:p-6 md:p-8"

@@ -35,9 +35,9 @@ const HEMISPHERE_SEGMENTS: [number, number, number, number, number, number][] = 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 /** Build an initial ball-grid layout. Called synchronously so balls exist on the first render frame. */
-function buildGrid(allSkills: Skill[], mobile: boolean): Ball[] {
-  const radius = mobile ? 0.52 : 1.1;
-  const cols = mobile ? 4 : 7;
+function buildGrid(allSkills: Skill[], mobile: boolean, tablet: boolean): Ball[] {
+  const radius = mobile ? 0.52 : tablet ? 0.75 : 1.1;
+  const cols = mobile ? 4 : tablet ? 5 : 7;
   const spacingX = radius * 2.2;
   const spacingY = radius * 2.6; // extra vertical gap for Html labels
 
@@ -216,19 +216,23 @@ function SkillBall({
 
 function SkillsPhysics({ allSkills }: { allSkills: Skill[] }) {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const isTablet = typeof window !== "undefined" && window.innerWidth >= 768 && window.innerWidth < 1024;
 
   // Build grid synchronously so balls exist on the very first render frame
-  const ballsRef = useRef<Ball[]>(buildGrid(allSkills, isMobile));
+  const ballsRef = useRef<Ball[]>(buildGrid(allSkills, isMobile, isTablet));
   const mouseRef = useRef({ x: 0, y: 0, active: false });
   const isMobileRef = useRef(isMobile);
+  const isTabletRef = useRef(isTablet);
 
-  // Rebuild grid when viewport crosses the mobile breakpoint
+  // Rebuild grid when viewport crosses the mobile/tablet breakpoints
   useEffect(() => {
     const onResize = () => {
       const mobile = window.innerWidth < 768;
-      if (mobile !== isMobileRef.current) {
+      const tablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      if (mobile !== isMobileRef.current || tablet !== isTabletRef.current) {
         isMobileRef.current = mobile;
-        ballsRef.current = buildGrid(allSkills, mobile);
+        isTabletRef.current = tablet;
+        ballsRef.current = buildGrid(allSkills, mobile, tablet);
       }
     };
     window.addEventListener("resize", onResize);
@@ -243,11 +247,12 @@ function SkillsPhysics({ allSkills }: { allSkills: Skill[] }) {
     mouseRef.current = { x: mx, y: my, active: isActive };
 
     const mobile = isMobileRef.current;
-    const attractRadius = mobile ? 2.4 : 5.5;
+    const tablet = isTabletRef.current;
+    const attractRadius = mobile ? 2.4 : tablet ? 3.5 : 5.5;
     const damping = isActive ? 0.98 : 0.995;
-    // Extra margin on mobile so Html labels don't clip at the canvas edge
-    const boundsX = viewport.width / 2 - (mobile ? 0.7 : 1.2);
-    const boundsY = viewport.height / 2 - (mobile ? 1.1 : 1.2);
+    // Extra margin on mobile/tablet so Html labels don't clip at the canvas edge
+    const boundsX = viewport.width / 2 - (mobile ? 0.7 : tablet ? 0.9 : 1.2);
+    const boundsY = viewport.height / 2 - (mobile ? 1.1 : tablet ? 1.0 : 1.2);
 
     // ── Apply forces ──────────────────────────────────────────────────────────
     for (const ball of balls) {
@@ -357,8 +362,8 @@ export function SkillsScene() {
   return (
     <div
       ref={containerRef}
-      // Taller on mobile to fit 4-column × 7-row grid with labels
-      className="relative flex h-[56rem] w-full cursor-crosshair items-center justify-center overflow-hidden bg-zinc-950 md:h-[50rem]"
+      // Height responsive: tallest on mobile (4-col grid), medium on tablet (5-col), compact on desktop
+      className="relative flex h-[56rem] w-full cursor-crosshair items-center justify-center overflow-hidden bg-zinc-950 md:h-[44rem] lg:h-[50rem]"
     >
       {everVisible ? (
         <Canvas camera={{ position: [0, 0, 40], fov: 20 }} gl={{ antialias: true, alpha: true }}>

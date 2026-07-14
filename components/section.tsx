@@ -36,14 +36,14 @@ export function Section({ children, id, className = "", title, subtitle }: Props
       ref={ref}
       id={id}
       className={cn(
-        "relative mx-auto w-full max-w-[86.25rem] scroll-mt-16 px-4 py-10 sm:px-6 md:scroll-mt-28 md:py-20 md:pl-20 md:pr-10 lg:pl-28 lg:pr-16 xl:pl-32 xl:pr-20",
+        "relative mx-auto w-full max-w-[86.25rem] scroll-mt-16 px-4 py-10 sm:px-6 md:scroll-mt-28 md:py-16 md:pl-10 md:pr-8 lg:py-20 lg:pl-28 lg:pr-16 xl:pl-32 xl:pr-20",
         className
       )}
     >
       {title && (
         <div className="relative mb-8 w-full text-left md:mb-12">
           <div className="relative z-10 flex flex-col items-start overflow-visible">
-            <h2 className="flex flex-wrap items-center overflow-visible font-sans text-4xl font-black uppercase leading-none tracking-tighter text-zinc-100 sm:text-5xl md:text-6xl lg:text-7xl">
+            <h2 className="flex flex-wrap items-center overflow-visible font-sans text-4xl font-black uppercase leading-none tracking-tighter text-zinc-100 sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl">
               {title.toUpperCase().split(" ").map((word) => (
                 <span key={word} className="mr-[0.25em] flex overflow-hidden py-1 pr-2.5">
                   {Array.from(word).map((char) => {

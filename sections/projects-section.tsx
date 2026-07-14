@@ -11,7 +11,7 @@ import { projects } from "@/constants/site";
 export function ProjectsSection() {
   return (
     <Section id="projects" title="My Work" subtitle="Featured Works">
-      <div className="relative mx-auto mt-6 flex w-full flex-col gap-12 sm:mt-8 md:mt-12 md:gap-20 md:px-4 lg:gap-24 lg:px-8">
+      <div className="relative mx-auto mt-6 flex w-full flex-col gap-10 sm:mt-8 md:mt-10 md:gap-14 md:px-4 lg:gap-20 lg:px-8">
         {projects.map((project, index) => (
           <motion.div
             key={project.id}
@@ -19,10 +19,10 @@ export function ProjectsSection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.8 }}
-            className="flex w-full flex-col items-start justify-between gap-8 border-b border-zinc-800/40 pb-12 last:border-0 last:pb-0 sm:gap-8 md:flex-row md:items-center md:gap-10 md:pb-20 lg:gap-14 lg:pb-24"
+            className="flex w-full flex-col items-start justify-between gap-8 border-b border-zinc-800/40 pb-10 last:border-0 last:pb-0 sm:gap-8 md:gap-10 md:pb-14 lg:flex-row lg:items-center lg:gap-14 lg:pb-20 xl:pb-24"
           >
             {/* Left: Info */}
-            <div className="flex w-full flex-row items-start gap-3 md:w-1/2 md:gap-5 lg:gap-6">
+            <div className="flex w-full flex-row items-start gap-3 lg:w-1/2 lg:gap-5 xl:gap-6">
               <span className="select-none font-mono text-3xl font-black leading-none text-zinc-800/50 sm:text-4xl md:text-5xl lg:text-7xl">
                 {String(index + 1).padStart(2, "0")}
               </span>
@@ -88,7 +88,7 @@ export function ProjectsSection() {
             </div>
 
             {/* Right: Image card */}
-            <div className="flex w-full items-center justify-center md:w-1/2">
+            <div className="flex w-full items-center justify-center lg:w-1/2">
               <TiltCard className="w-full">
                 <div
                   className="group relative block aspect-[16/10] w-full overflow-hidden rounded-xl border border-white/5 bg-zinc-950/50 shadow-2xl sm:rounded-2xl"

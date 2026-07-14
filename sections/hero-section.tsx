@@ -53,7 +53,7 @@ export function HeroSection({ onExplore }: Props) {
   const currentRole = siteConfig.rotatingRoles[roleIndex];
 
   return (
-    <section className="relative flex h-auto select-none flex-col items-center justify-center overflow-hidden bg-zinc-950 pb-10 pt-20 sm:pb-12 sm:pt-24 md:h-svh md:flex-row md:items-center md:justify-between">
+    <section className="relative flex h-auto select-none flex-col items-center justify-center overflow-hidden bg-zinc-950 pb-10 pt-20 sm:pb-12 sm:pt-24 md:h-svh md:min-h-[600px] md:flex-row md:items-center md:justify-between">
       <div className="pointer-events-none absolute inset-0 z-0 opacity-[0.03] mix-blend-overlay" />
 
       {/* CREATIVE text — large desktop only, positioned absolutely to the section */}
@@ -67,7 +67,7 @@ export function HeroSection({ onExplore }: Props) {
       {/* Role ticker — positioned absolutely to the section, tablet+ */}
       <div
         style={{ height: "min(8vw, 64px)" }}
-        className="pointer-events-none absolute bottom-[6rem] right-[5%] z-[25] hidden overflow-hidden sm:flex md:bottom-[5rem] lg:bottom-[6rem]"
+        className="pointer-events-none absolute bottom-[5rem] right-[4%] z-[25] hidden overflow-hidden md:flex md:bottom-[4rem] lg:bottom-[5rem]"
       >
         <AnimatePresence mode="wait">
           <motion.h3
@@ -122,16 +122,16 @@ export function HeroSection({ onExplore }: Props) {
         </Magnetic>
       </div>
 
-      <div className="relative z-20 mx-auto flex w-full max-w-[86.25rem] flex-col items-center gap-6 px-4 sm:gap-8 sm:px-6 md:flex-row md:pl-20 md:pr-10 lg:pl-28 lg:pr-16 xl:pl-32 xl:pr-20">
+      <div className="relative z-20 mx-auto flex w-full max-w-[86.25rem] flex-col items-center gap-4 px-4 sm:gap-6 sm:px-6 md:flex-row md:gap-4 md:px-8 md:pl-14 md:pr-6 lg:pl-28 lg:pr-16 xl:pl-32 xl:pr-20">
         {/* Text Content */}
-        <div className="relative z-[35] flex w-full flex-col justify-center text-center md:w-[48%] md:text-left lg:w-[45%]">
+        <div className="relative z-[35] flex w-full flex-col justify-center text-center md:w-[50%] md:text-left lg:w-[45%]">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: "easeOut" }}>
             <span className="mb-3 inline-block pl-1 font-mono text-sm font-bold uppercase tracking-wide text-cyan-400 sm:mb-4 sm:text-base">
               Hello! I&apos;m
             </span>
           </motion.div>
 
-          <h1 className="flex flex-col font-sans text-[11vw] font-black uppercase leading-[0.9] tracking-tighter text-zinc-100 sm:text-[13vw] md:text-[clamp(60px,8vw,96px)] md:leading-none">
+          <h1 className="flex flex-col font-sans text-[11vw] font-black uppercase leading-[0.9] tracking-tighter text-zinc-100 sm:text-[13vw] md:text-[clamp(36px,5.5vw,72px)] md:leading-none lg:text-[clamp(52px,7vw,96px)]">
             <span className="flex justify-center overflow-hidden py-0 md:justify-start md:py-1">
               {Array.from(siteConfig.firstName).map((char, index) => (
                 <motion.span
@@ -174,7 +174,7 @@ export function HeroSection({ onExplore }: Props) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.4 }}
-            className="mx-auto mt-6 max-w-sm border-l-2 border-zinc-800 pl-4 text-base font-medium leading-relaxed text-zinc-400 sm:mt-8 sm:max-w-md sm:text-lg md:mx-0 md:mt-10 md:text-lg lg:text-xl"
+            className="mx-auto mt-4 max-w-sm border-l-2 border-zinc-800 pl-4 text-sm font-medium leading-relaxed text-zinc-400 sm:mt-6 sm:max-w-md sm:text-base md:mx-0 md:mt-6 md:text-base lg:mt-10 lg:text-xl"
           >
             I build <strong className="text-zinc-100">intelligent</strong> digital experiences combining
             high-performance code with striking visual design.
@@ -226,7 +226,7 @@ export function HeroSection({ onExplore }: Props) {
         </div>
 
         {/* Portrait — contained, overflow clipped */}
-        <div className="relative flex w-full items-end justify-center overflow-hidden sm:h-auto md:w-[48%] md:items-center md:justify-end lg:w-[50%]">
+        <div className="relative flex w-full items-end justify-center overflow-hidden sm:h-auto md:w-[46%] md:items-center md:justify-end lg:w-[50%]">
           <motion.div
             initial={{ scale: 1, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -239,7 +239,7 @@ export function HeroSection({ onExplore }: Props) {
             }}
             className="pointer-events-auto relative z-20 w-full overflow-hidden"
             style={{
-              maxWidth: "clamp(14rem, 55vw, 30rem)",
+              maxWidth: "clamp(12rem, 38vw, 30rem)",
               aspectRatio: "3 / 4",
             }}
           >
