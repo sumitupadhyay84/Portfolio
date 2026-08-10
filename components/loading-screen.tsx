@@ -13,7 +13,7 @@ export function LoadingScreen({ onComplete }: Props) {
 
   useEffect(() => {
     let current = 0;
-    const increment = (100 - current) / (4000 / 20);
+    const increment = (100 - current) / (1500 / 20);
     const interval = window.setInterval(() => {
       current += increment;
       if (current >= 100) {
@@ -61,7 +61,7 @@ export function LoadingScreen({ onComplete }: Props) {
               className="flex items-center justify-center py-2 font-mono text-8xl font-black leading-none tracking-tighter md:text-[180px]"
               initial={{ y: "100%", opacity: 0 }}
               animate={{ y: "0%", opacity: 1 }}
-              transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+              transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
             >
               {String(progress).padStart(3, "0")}
               <span className="ml-3 flex items-center text-3xl leading-none text-cyan-400 md:text-6xl">%</span>
